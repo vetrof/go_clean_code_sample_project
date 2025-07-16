@@ -10,11 +10,11 @@ import (
 
 // PlaceHandler хендлер для работы с местами по ID
 type PlaceHandler struct {
-	placeService service.PlaceService
+	placeService service.PlaceServiceInterface
 }
 
 // NewPlaceHandler создает новый хендлер для работы с местами
-func NewPlaceHandler(service service.PlaceService) *PlaceHandler {
+func NewPlaceHandler(service service.PlaceServiceInterface) *PlaceHandler {
 	return &PlaceHandler{
 		placeService: service,
 	}

@@ -5,13 +5,20 @@ import (
 	"place_service/internal/place/repository"
 )
 
+// PlaceServiceInterface интерфейс для сервиса работы с местами по ID
+type PlaceServiceInterface interface {
+	GetPlaceByID(id int) (*models.Place, error)
+	GetAllPlaces() ([]models.Place, error)
+	AddPlace(place models.Place) error
+}
+
 // PlaceServiceImpl реализация сервиса для работы с местами по ID
 type PlaceServiceImpl struct {
-	placeRepo repository.PlaceRepository
+	placeRepo repository.PlaceRepositoryInterface
 }
 
 // NewPlaceService создает новый сервис для работы с местами
-func NewPlaceService(repo repository.PlaceRepository) PlaceService {
+func NewPlaceService(repo repository.PlaceRepositoryInterface) PlaceServiceInterface {
 	return &PlaceServiceImpl{
 		placeRepo: repo,
 	}
@@ -30,8 +37,13 @@ func (s *PlaceServiceImpl) GetPlaceByID(id int) (*models.Place, error) {
 		return nil, NewRepositoryError("failed to get place by id", err)
 	}
 
-	// Валидация полученного места
-	if place != nil && !place.IsValid() {
+	// Проверка, что место найдено
+	if place == nil {
+		return nil, NewNotFoundError("place not found")
+	}
+
+	// БИЗНЕС-ЛОГИКА: валидация полученного места
+	if !place.IsValid() {
 		return nil, NewValidationError("place data is invalid")
 	}
 
@@ -40,15 +52,15 @@ func (s *PlaceServiceImpl) GetPlaceByID(id int) (*models.Place, error) {
 
 // GetAllPlaces получает все места
 func (s *PlaceServiceImpl) GetAllPlaces() ([]models.Place, error) {
-	// Получение данных из репозитория
-	places, err := s.placeRepo.GetAllPlaces()
+	// Получение всех мест из репозитория
+	allPlaces, err := s.placeRepo.GetAllPlaces()
 	if err != nil {
 		return nil, NewRepositoryError("failed to get all places", err)
 	}
 
-	// Фильтрация только валидных мест
+	// БИЗНЕС-ЛОГИКА: фильтрация только валидных мест
 	validPlaces := make([]models.Place, 0)
-	for _, place := range places {
+	for _, place := range allPlaces {
 		if place.IsValid() {
 			validPlaces = append(validPlaces, place)
 		}
@@ -59,18 +71,18 @@ func (s *PlaceServiceImpl) GetAllPlaces() ([]models.Place, error) {
 
 // AddPlace добавляет новое место
 func (s *PlaceServiceImpl) AddPlace(place models.Place) error {
-	// Валидация места
+	// БИЗНЕС-ЛОГИКА: валидация места
 	if !place.IsValid() {
 		return NewValidationError("invalid place data")
 	}
 
-	// Проверка на дубликат ID через сервис
+	// БИЗНЕС-ЛОГИКА: проверка на дубликат ID
 	existingPlace, err := s.placeRepo.GetPlaceByID(place.ID)
 	if err == nil && existingPlace != nil {
 		return NewValidationError("place with this id already exists")
 	}
 
-	// Добавление через репозиторий
+	// Добавление через репозиторий (репозиторий работает только с данными)
 	if err := s.placeRepo.AddPlace(place); err != nil {
 		return NewRepositoryError("failed to add place", err)
 	}

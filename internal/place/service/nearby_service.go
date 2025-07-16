@@ -5,41 +5,30 @@ import (
 	"place_service/internal/place/repository"
 )
 
-// NearbyServiceImpl реализация сервиса для поиска ближайших мест
+// NearbyServiceInterface описывает интерфейс для поиска ближайших мест
+type NearbyServiceInterface interface {
+	FindNearby(lat, lng float64) ([]models.Place, error)
+}
+
+// NearbyServiceImpl — реализация сервиса
 type NearbyServiceImpl struct {
-	nearbyRepo repository.NearbyRepository
+	placeRepo repository.NearbyRepositoryInterface
 }
 
-// NewNearbyService создает новый сервис для поиска ближайших мест
-func NewNearbyService(repo repository.NearbyRepository) NearbyService {
+// NewNearbyService создает новый экземпляр сервиса
+func NewNearbyService(repo repository.NearbyRepositoryInterface) NearbyServiceInterface {
 	return &NearbyServiceImpl{
-		nearbyRepo: repo,
+		placeRepo: repo,
 	}
 }
 
-// FindNearby находит места рядом с указанными координатами
+// FindNearby получает список ближайших мест
 func (s *NearbyServiceImpl) FindNearby(lat, lng float64) ([]models.Place, error) {
-	// Валидация входных данных
-	if lat < -90 || lat > 90 {
-		return nil, NewValidationError("latitude must be between -90 and 90")
-	}
-	if lng < -180 || lng > 180 {
-		return nil, NewValidationError("longitude must be between -180 and 180")
-	}
-
-	// Получение данных из репозитория
-	places, err := s.nearbyRepo.GetNearbyPlaces(lat, lng)
+	places, err := s.placeRepo.GetNearbyPlaces(lat, lng)
 	if err != nil {
-		return nil, NewRepositoryError("failed to get nearby places", err)
+		return nil, err
 	}
 
-	// Фильтрация только валидных мест
-	validPlaces := make([]models.Place, 0)
-	for _, place := range places {
-		if place.IsValid() {
-			validPlaces = append(validPlaces, place)
-		}
-	}
-
-	return validPlaces, nil
+	// Пока что возвращаем все места — фильтрация может быть добавлена здесь
+	return places, nil
 }

@@ -10,11 +10,11 @@ import (
 
 // NearbyHandler хендлер для работы с ближайшими местами
 type NearbyHandler struct {
-	nearbyService service.NearbyService
+	nearbyService service.NearbyServiceInterface
 }
 
 // NewNearbyHandler создает новый хендлер для ближайших мест
-func NewNearbyHandler(service service.NearbyService) *NearbyHandler {
+func NewNearbyHandler(service service.NearbyServiceInterface) *NearbyHandler {
 	return &NearbyHandler{
 		nearbyService: service,
 	}

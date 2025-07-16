@@ -9,11 +9,11 @@ import (
 
 // PopularHandler хендлер для работы с популярными местами
 type PopularHandler struct {
-	popularService service.PopularService
+	popularService service.PopularServiceInterface
 }
 
 // NewPopularHandler создает новый хендлер для популярных мест
-func NewPopularHandler(service service.PopularService) *PopularHandler {
+func NewPopularHandler(service service.PopularServiceInterface) *PopularHandler {
 	return &PopularHandler{
 		popularService: service,
 	}

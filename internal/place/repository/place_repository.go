@@ -5,13 +5,20 @@ import (
 	"place_service/internal/place/models"
 )
 
+// PlaceRepositoryInterface интерфейс для работы с местами по ID
+type PlaceRepositoryInterface interface {
+	GetPlaceByID(id int) (*models.Place, error)
+	GetAllPlaces() ([]models.Place, error)
+	AddPlace(place models.Place) error
+}
+
 // PlaceRepositoryImpl реализация репозитория для работы с местами по ID
 type PlaceRepositoryImpl struct {
 	places []models.Place
 }
 
 // NewPlaceRepository создает новый репозиторий для работы с местами
-func NewPlaceRepository() PlaceRepository {
+func NewPlaceRepository() PlaceRepositoryInterface {
 	// Создаем набор тестовых данных для всех мест
 	places := []models.Place{
 		{
@@ -100,20 +107,17 @@ func (r *PlaceRepositoryImpl) GetAllPlaces() ([]models.Place, error) {
 	return r.places, nil
 }
 
-// AddPlace добавляет новое место (для демонстрации расширяемости)
+// AddPlace добавляет новое место (только работа с данными)
+// Валидация и проверка бизнес-правил должна быть в сервисе
 func (r *PlaceRepositoryImpl) AddPlace(place models.Place) error {
-	// Проверка на дубликат ID
+	// Проверка на дубликат ID - это работа с данными, оставляем
 	for _, existingPlace := range r.places {
 		if existingPlace.ID == place.ID {
 			return fmt.Errorf("place with id %d already exists", place.ID)
 		}
 	}
 
-	// Валидация места
-	if !place.IsValid() {
-		return fmt.Errorf("invalid place data")
-	}
-
+	// Просто добавляем место без валидации (валидация - это бизнес-логика)
 	r.places = append(r.places, place)
 	return nil
 }

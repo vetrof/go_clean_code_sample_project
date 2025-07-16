@@ -4,13 +4,18 @@ import (
 	"place_service/internal/place/models"
 )
 
+// NearbyRepositoryInterface интерфейс для работы с ближайшими местами
+type NearbyRepositoryInterface interface {
+	GetNearbyPlaces(lat, lng float64) ([]models.Place, error)
+}
+
 // NearbyRepositoryImpl реализация репозитория для ближайших мест
 type NearbyRepositoryImpl struct {
 	places []models.Place
 }
 
 // NewNearbyRepository создает новый репозиторий для ближайших мест
-func NewNearbyRepository() NearbyRepository {
+func MokNearbyRepository() NearbyRepositoryInterface {
 	// Создаем набор тестовых данных для ближайших мест
 	places := []models.Place{
 		{
@@ -27,27 +32,6 @@ func NewNearbyRepository() NearbyRepository {
 			Lng:   37.6018,
 			Photo: "https://example.com/gorky-park.jpg",
 		},
-		{
-			ID:    3,
-			Name:  "Третьяковская галерея",
-			Lat:   55.7414,
-			Lng:   37.6207,
-			Photo: "https://example.com/tretyakov.jpg",
-		},
-		{
-			ID:    4,
-			Name:  "Воробьевы горы",
-			Lat:   55.7105,
-			Lng:   37.5439,
-			Photo: "https://example.com/sparrow-hills.jpg",
-		},
-		{
-			ID:    5,
-			Name:  "Большой театр",
-			Lat:   55.7596,
-			Lng:   37.6189,
-			Photo: "https://example.com/bolshoi.jpg",
-		},
 	}
 
 	return &NearbyRepositoryImpl{
@@ -55,27 +39,10 @@ func NewNearbyRepository() NearbyRepository {
 	}
 }
 
-// GetNearbyPlaces возвращает места рядом с указанными координатами
+// GetNearbyPlaces возвращает все места (без фильтрации)
+// Бизнес-логика фильтрации должна быть в сервисе
 func (r *NearbyRepositoryImpl) GetNearbyPlaces(lat, lng float64) ([]models.Place, error) {
-	// Простая логика поиска ближайших мест
-	nearbyPlaces := make([]models.Place, 0)
-
-	// Находим места в радиусе ~0.1 градуса (примерно 10 км)
-	for _, place := range r.places {
-		distance := place.DistanceTo(lat, lng)
-		if distance < 0.01 { // Примерно 1 км в градусах
-			nearbyPlaces = append(nearbyPlaces, place)
-		}
-	}
-
-	// Если ничего не найдено рядом, возвращаем первые 3 места
-	if len(nearbyPlaces) == 0 {
-		if len(r.places) >= 3 {
-			nearbyPlaces = r.places[:3]
-		} else {
-			nearbyPlaces = r.places
-		}
-	}
-
-	return nearbyPlaces, nil
+	// Репозиторий просто возвращает все доступные места
+	// Фильтрация по расстоянию - это бизнес-логика, она должна быть в сервисе
+	return r.places, nil
 }

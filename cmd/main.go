@@ -14,7 +14,7 @@ func main() {
 
 	// === СЛОЙ РЕПОЗИТОРИЕВ (DATA LAYER) ===
 	// Создаем репозитории для работы с данными
-	nearbyRepo := repository.NewNearbyRepository()
+	nearbyRepo := repository.MokNearbyRepository()
 	popularRepo := repository.NewPopularRepository()
 	placeRepo := repository.NewPlaceRepository()
 	log.Println("✓ Repositories initialized")

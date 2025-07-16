@@ -4,13 +4,18 @@ import (
 	"place_service/internal/place/models"
 )
 
+// PopularRepositoryInterface интерфейс для работы с популярными местами
+type PopularRepositoryInterface interface {
+	GetPopularPlaces() ([]models.Place, error)
+}
+
 // PopularRepositoryImpl реализация репозитория для популярных мест
 type PopularRepositoryImpl struct {
 	places []models.Place
 }
 
 // NewPopularRepository создает новый репозиторий для популярных мест
-func NewPopularRepository() PopularRepository {
+func NewPopularRepository() PopularRepositoryInterface {
 	// Создаем набор тестовых данных для популярных мест
 	places := []models.Place{
 		{
@@ -55,9 +60,10 @@ func NewPopularRepository() PopularRepository {
 	}
 }
 
-// GetPopularPlaces возвращает список популярных мест
+// GetPopularPlaces возвращает все места (без сортировки по популярности)
+// Бизнес-логика определения популярности должна быть в сервисе
 func (r *PopularRepositoryImpl) GetPopularPlaces() ([]models.Place, error) {
-	// В реальном приложении здесь была бы логика сортировки по популярности
-	// Возвращаем все популярные места
+	// Репозиторий просто возвращает все доступные места
+	// Логика сортировки по популярности - это бизнес-логика, она должна быть в сервисе
 	return r.places, nil
 }
