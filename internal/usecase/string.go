@@ -1,4 +1,4 @@
-package stringusecase
+package usecase
 
 import "random-service/internal/entity"
 
@@ -6,15 +6,15 @@ type StringRepo interface {
 	GetRandomString() (string, error)
 }
 
-type UseCase struct {
+type StringUseCase struct {
 	repo StringRepo
 }
 
-func New(r StringRepo) *UseCase {
-	return &UseCase{repo: r}
+func NewStringUseCase(r StringRepo) StringUseCase {
+	return StringUseCase{repo: r}
 }
 
-func (uc *UseCase) Get() (*entity.RandomString, error) {
+func (uc StringUseCase) Get() (*entity.RandomString, error) {
 	s, err := uc.repo.GetRandomString()
 	if err != nil {
 		return nil, err

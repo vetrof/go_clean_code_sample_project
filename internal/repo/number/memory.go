@@ -1,8 +1,6 @@
 package numberrepo
 
-import (
-	"math/rand"
-)
+import "math/rand"
 
 type MemoryRepo struct{}
 

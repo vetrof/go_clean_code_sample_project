@@ -1,4 +1,4 @@
-package numberusecase
+package usecase
 
 import "random-service/internal/entity"
 
@@ -6,15 +6,15 @@ type NumberRepo interface {
 	GetRandomNumber() (int, error)
 }
 
-type UseCase struct {
+type NumberUseCase struct {
 	repo NumberRepo
 }
 
-func New(r NumberRepo) *UseCase {
-	return &UseCase{repo: r}
+func NewNumberUseCase(r NumberRepo) NumberUseCase {
+	return NumberUseCase{repo: r}
 }
 
-func (uc *UseCase) Get() (*entity.RandomNumber, error) {
+func (uc NumberUseCase) Get() (*entity.RandomNumber, error) {
 	n, err := uc.repo.GetRandomNumber()
 	if err != nil {
 		return nil, err

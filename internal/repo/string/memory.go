@@ -1,8 +1,6 @@
 package stringrepo
 
-import (
-	"math/rand"
-)
+import "math/rand"
 
 type MemoryRepo struct {
 	values []string
@@ -10,7 +8,7 @@ type MemoryRepo struct {
 
 func NewMemoryRepo() *MemoryRepo {
 	return &MemoryRepo{
-		values: []string{"hello", "world", "golang", "clean-arch"},
+		values: []string{"clean", "arch", "go", "awesome"},
 	}
 }
 
