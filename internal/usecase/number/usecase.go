@@ -1,9 +1,11 @@
 package number
 
+// Repository - интерфейс, реализуемый в репозитории.
 type Repository interface {
 	Get() int
 }
 
+// UseCase - реализация бизнес-логики, использует интерфейс репозитория.
 type UseCase struct {
 	repo Repository
 }

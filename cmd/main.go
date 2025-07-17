@@ -14,20 +14,21 @@ import (
 )
 
 func main() {
-	// Инициализация зависимостей
+	// init repositories
 	numRepo := numberRepo.New()
 	strRepo := stringRepo.New()
 
-	numUseCase := numberUC.New(numRepo)
-	strUseCase := stringUC.New(strRepo)
+	// init usecases — принимают интерфейсы
+	numUC := numberUC.New(numRepo)
+	strUC := stringUC.New(strRepo)
 
-	numHandler := handler.NewNumberHandler(numUseCase)
-	strHandler := handler.NewStringHandler(strUseCase)
+	// init handlers
+	numHandler := handler.NewNumberHandler(numUC)
+	strHandler := handler.NewStringHandler(strUC)
 
-	// Создание Fiber-приложения и маршрутов
+	// create app and routes
 	app := fiber.New()
 	router.SetupRoutes(app, numHandler, strHandler)
 
-	// Запуск сервера
 	log.Fatal(app.Listen(":3000"))
 }
