@@ -4,13 +4,15 @@ package http
 import (
 	"net/http"
 
+	"clean_arc/internal/controller/http/middleware"
+	v1 "clean_arc/internal/controller/http/v1"
+	"clean_arc/internal/usecase"
+	"clean_arc/pkg/logger"
+
+	"clean_arc/config"
+	_ "clean_arc/docs" // Swagger docs.
+
 	"github.com/ansrivas/fiberprometheus/v2"
-	"github.com/evrone/go-clean-template/config"
-	_ "github.com/evrone/go-clean-template/docs" // Swagger docs.
-	"github.com/evrone/go-clean-template/internal/controller/http/middleware"
-	v1 "github.com/evrone/go-clean-template/internal/controller/http/v1"
-	"github.com/evrone/go-clean-template/internal/usecase"
-	"github.com/evrone/go-clean-template/pkg/logger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 )

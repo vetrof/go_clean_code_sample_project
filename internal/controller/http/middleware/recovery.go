@@ -5,7 +5,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/evrone/go-clean-template/pkg/logger"
+	"clean_arc/pkg/logger"
+
 	"github.com/gofiber/fiber/v2"
 	fiberRecover "github.com/gofiber/fiber/v2/middleware/recover"
 )

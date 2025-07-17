@@ -13,8 +13,6 @@ type (
 		HTTP    HTTP
 		Log     Log
 		PG      PG
-		GRPC    GRPC
-		RMQ     RMQ
 		Metrics Metrics
 		Swagger Swagger
 	}
@@ -40,18 +38,6 @@ type (
 	PG struct {
 		PoolMax int    `env:"PG_POOL_MAX,required"`
 		URL     string `env:"PG_URL,required"`
-	}
-
-	// GRPC -.
-	GRPC struct {
-		Port string `env:"GRPC_PORT,required"`
-	}
-
-	// RMQ -.
-	RMQ struct {
-		ServerExchange string `env:"RMQ_RPC_SERVER,required"`
-		ClientExchange string `env:"RMQ_RPC_CLIENT,required"`
-		URL            string `env:"RMQ_URL,required"`
 	}
 
 	// Metrics -.

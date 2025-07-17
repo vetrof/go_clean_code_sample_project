@@ -1,7 +1,8 @@
 package v1
 
 import (
-	"github.com/evrone/go-clean-template/internal/usecase"
+	"clean_arc/internal/usecase"
+
 	"github.com/evrone/go-clean-template/pkg/logger"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -16,5 +17,6 @@ func NewTranslationRoutes(apiV1Group fiber.Router, t usecase.Translation, l logg
 	{
 		translationGroup.Get("/history", r.history)
 		translationGroup.Post("/do-translate", r.doTranslate)
+		translationGroup.Get("/test", r.doTranslate)
 	}
 }
