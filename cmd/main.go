@@ -18,13 +18,13 @@ func main() {
 	numRepo := numberRepo.New()
 	strRepo := stringRepo.New()
 
-	// init usecases — принимают интерфейсы
-	numUC := numberUC.New(numRepo)
-	strUC := stringUC.New(strRepo)
+	// init usecases
+	numberUseCase := numberUC.New(numRepo)
+	stringUseCase := stringUC.New(strRepo)
 
 	// init handlers
-	numHandler := handler.NewNumberHandler(numUC)
-	strHandler := handler.NewStringHandler(strUC)
+	numHandler := handler.NewNumberHandler(numberUseCase)
+	strHandler := handler.NewStringHandler(stringUseCase)
 
 	// create app and routes
 	app := fiber.New()
