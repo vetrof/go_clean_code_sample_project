@@ -1,29 +1,34 @@
 package main
 
 import (
-	// Импорт обработчиков, репозиториев, роутера и сервисов для работы с местами
-	"place_service/internal/place/handler"
-	"place_service/internal/place/repository"
-	"place_service/internal/place/router"
-	"place_service/internal/place/service"
+	"log"
+
+	"github.com/gofiber/fiber/v2"
+
+	"go-fiber-app/internal/handler"
+	numberRepo "go-fiber-app/internal/repository/number"
+	stringRepo "go-fiber-app/internal/repository/string"
+	"go-fiber-app/internal/router"
+	numberUC "go-fiber-app/internal/usecase/number"
+	stringUC "go-fiber-app/internal/usecase/string"
 )
 
-// Точка входа в приложение
 func main() {
-	// Создание мок-репозиториев для поиска ближайших и популярных мест
-	nearRepo := repository.NewMockNearbyRepo()
-	popularRepo := repository.NewMockPopularRepo()
+	// init repositories
+	numRepo := numberRepo.New()
+	strRepo := stringRepo.New()
 
-	// Создание сервисов, использующих соответствующие репозитории
-	nearSvc := service.NewNearbyService(nearRepo)
-	popSvc := service.NewPopularService(popularRepo)
+	// init usecases
+	numberUseCase := numberUC.New(numRepo)
+	stringUseCase := stringUC.New(strRepo)
 
-	// Настройка роутера с обработчиками для поиска ближайших и популярных мест
-	r := router.SetupRouter(
-		handler.NearbyHandler(nearSvc),
-		handler.PopularHandler(popSvc),
-	)
+	// init handlers
+	numHandler := handler.NewNumberHandler(numberUseCase)
+	strHandler := handler.NewStringHandler(stringUseCase)
 
-	// Запуск HTTP-сервера на порту 8080
-	r.Run(":8080")
+	// create app and routes
+	app := fiber.New()
+	router.SetupRoutes(app, numHandler, strHandler)
+
+	log.Fatal(app.Listen(":3000"))
 }
