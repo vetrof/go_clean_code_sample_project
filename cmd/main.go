@@ -15,14 +15,17 @@ import (
 
 func main() {
 	// init repositories
+	// вызываем метод New для каждого репозитория
 	numRepo := numberRepo.New()
 	strRepo := stringRepo.New()
 
 	// init usecases
+	// передаюм в юзкейсы конкретные реализации репозиториев
 	numberUseCase := numberUC.New(numRepo)
 	stringUseCase := stringUC.New(strRepo)
 
 	// init handlers
+	// передаюм в хендлеры юзкейсы в которых уже проинициализированы репозитории
 	numHandler := handler.NewNumberHandler(numberUseCase)
 	strHandler := handler.NewStringHandler(stringUseCase)
 
